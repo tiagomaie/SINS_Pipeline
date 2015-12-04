@@ -1,0 +1,46 @@
+# This is a comment. Comments do not contribute for the input. All comments start with a '#' symbol
+# All parameters in this input file should NOT contain ANY space characters.
+# Parameter in this file do NOT need to be between the '"' character.
+# For example PARAMETER_1 = thisIsParameterOne
+# All variables starting with "PATH_TO_" correspond to Path variables, that is
+# a variable that should receive a path to a folder (or file). In the context of this file
+# all path variables should correspond to absolute paths and NOT relative paths
+# For example:
+#   /home/user/this/is/an/absolute/path/
+#   ./this/is/not
+OPTIONS 1337
+
+PROJECT_NAME = ParamPipelineTest
+
+# SINS
+PATH_TO_SINS_DIST_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINS/dist/
+PATH_TO_SINS_INPUT_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINS/dist/input/
+NAME_OF_SINS_PROJECT = PipelineTestSimulation
+NUMBER_OF_SIMULATIONS = 1 # number of simulations to be performed
+
+# SINS SAMPLER
+NAME_OF_SINSSAMPLER_SIMULATION = PipelinePARAM_SSampler
+PATH_TO_SINSSAMPLER_DIST_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINSSampler/dist/
+PATH_TO_SINSSAMPLER_INPUT_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINSSampler/dist/input/
+PATH_TO_OUTPUT_FOLDER_SINSSAMPLER = /home/tiago/Documents/PipelineTestFolder/SINSSampler/dist/output/
+
+
+# AGGREGATE SINS
+PATH_TO_AGGREGATESINS_DIST_FOLDER = /home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/
+PATH_TO_OUTPUT_FOLDER_AGGREGATESINS = /home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/output/AggregatedFiles_Test/
+NUMBER_OF_CHROMOSOMES = 4 # number of chromosome to be analyzed
+
+# ARLEQUIN
+PATH_TO_ARLEQUIN_FOLDER = /home/tiago/Documents/PipelineTestFolder/Arlequin/
+NAME_OF_LAUNCH_ARLECORE_SCRIPT = LaunchArlecore.sh # if you are not sure, do not touch this
+NAME_OF_ARLEQUIN_SETTINGS_FILE = arl_run.ars # if you are not sure, do not touch this
+NAME_OF_ARLEQUIN_EXECUTABLE_FILE = arlecore3522_64bit # if you are not sure, do not touch this
+
+# ARLEQUIN OUTPUT PARSER
+IS_TABLE_ADAPTED_TO_R = True # (True or False) R script will not work if this is defined to False
+PATH_TO_ARLEQUINOUTPUTPARSER_DIST_FOLDER = /home/tiago/Documents/PipelineTestFolder/ArlequinOutputParser/dist/
+PATH_TO_OUPUT_FOLDER_ARLEQUINOUTPUTPARSER = /home/tiago/Documents/PipelineTestFolder/ArlequinOutputParser/dist/output/PipelineTest/
+
+
+# PARSED OUTPUT TO GRAPHS
+PATH_TO_R_SCRIPT_FOLDER = /home/tiago/Documents/PipelineTestFolder/ParsedOutputToGraphs/
