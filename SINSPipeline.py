@@ -60,31 +60,31 @@ with open("./Input_SINS_Pipeline.par", 'r') as inF:
             pathToRScriptFolder = line.split()[2]
 
 
-#main project
-    #projectName = "ParamPipelineTest"
-#sins
-    #pathToSINSdistFolder = "/home/tiago/Documents/PipelineTestFolder/SINS/dist/"
-    #nameOfSINSProject = "PipelineTestSimulation"
-    #numberOfSimulations = 1
-#sinssampler
-    #nameOfSINSSamplerSimulation = "PipelineTestSSampler"
-    #outputFolderSINSSampler = "/home/tiago/Documents/PipelineTestFolder/SINSSampler/dist/output/PipelineTestOutputSSampler/"
-    #pathToSINSSAMPLERdistFolder = "/home/tiago/Documents/PipelineTestFolder/SINSSampler/dist/"
-#aggregatesins
-    #outputFolderAggregate = "/home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/output/AggregatedFiles_Test/"
-    #pathToAGGREGATESINSdistFolder = "/home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/"
-    #numberOfZomes = 4
-#arlequin
-    #arlequinFolder = "/home/tiago/Documents/PipelineTestFolder/Arlequin/"
-    #launchArlecore = "LaunchArlecore.sh"
-    #arlequinSettingsFile = "arl_run.ars"
-    #arlequinExecutable = "arlecore3522_64bit"
-#arlequinoutputparser
-    #isTableAdaptedToR = True
-    #ouputFolderArlequinOutputParser = "/home/tiago/Documents/PipelineTestFolder/ArlequinOutputParser/dist/output/PipelineTest/"
-    #pathToARLEQOUTPUTPARSERdistFolder = "/home/tiago/Documents/PipelineTestFolder/ArlequinOutputParser/dist/"
-#parsedoutputtographs
-    #pathToRScriptFolder = "/home/tiago/Documents/PipelineTestFolder/ParsedOutputToGraphs/"
+# main project
+    # projectName = "ParamPipelineTest"
+# sins
+    # pathToSINSdistFolder = "/home/tiago/Documents/PipelineTestFolder/SINS/dist/"
+    # nameOfSINSProject = "PipelineTestSimulation"
+    # numberOfSimulations = 1
+# sinssampler
+    # nameOfSINSSamplerSimulation = "PipelineTestSSampler"
+    # outputFolderSINSSampler = "/home/tiago/Documents/PipelineTestFolder/SINSSampler/dist/output/PipelineTestOutputSSampler/"
+    # pathToSINSSAMPLERdistFolder = "/home/tiago/Documents/PipelineTestFolder/SINSSampler/dist/"
+# aggregatesins
+    # outputFolderAggregate = "/home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/output/AggregatedFiles_Test/"
+    # pathToAGGREGATESINSdistFolder = "/home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/"
+    # numberOfZomes = 4
+# arlequin
+    # arlequinFolder = "/home/tiago/Documents/PipelineTestFolder/Arlequin/"
+    # launchArlecore = "LaunchArlecore.sh"
+    # arlequinSettingsFile = "arl_run.ars"
+    # arlequinExecutable = "arlecore3522_64bit"
+# arlequinoutputparser
+    # isTableAdaptedToR = True
+    # ouputFolderArlequinOutputParser = "/home/tiago/Documents/PipelineTestFolder/ArlequinOutputParser/dist/output/PipelineTest/"
+    # pathToARLEQOUTPUTPARSERdistFolder = "/home/tiago/Documents/PipelineTestFolder/ArlequinOutputParser/dist/"
+# parsedoutputtographs
+    # pathToRScriptFolder = "/home/tiago/Documents/PipelineTestFolder/ParsedOutputToGraphs/"
 
 
 '''
@@ -116,7 +116,7 @@ PipelineTestFolder
 # SINS2
 
 cmdExecuteSINS = "java -jar SINS2.jar  -projectName \"" + nameOfSINSProject + \
-                 "\" -formati fZip -numberOfSimulation "+str(numberOfSimulations)+" -takeSampledParametersFromFile yes"
+                 "\" -formati fZip -numberOfSimulation " + str(numberOfSimulations) + " -takeSampledParametersFromFile yes"
 cmdExecuteSINS = shlex.split(cmdExecuteSINS)
 
 # change SINS so that maybe the file not found exception doesnt happen

@@ -6,86 +6,92 @@ Currently I only tested it with a single autosome and a single layer. Need to ru
 '''
 
 
-def main(simulationName):
+def main(simulation_name):
+    path_to_sins_input_folder = None
+    name_of_sins_project = None
+    address_of_input_folder = None
+    number_of_layers = None
+    number_of_autosomes_line = None
+    type_of_chromosome_x = None
+    type_of_chromosome_y = None
+    type_of_chromosome_mt = None
+    type_of_chromosome_a = None
+    recording_starts_at_gen = None
 
     with open("./Input_SINS_Pipeline.par", 'r') as inF:
         for line in inF:
             if 'PATH_TO_SINS_INPUT_FOLDER' in line:
-                pathToSINSInputFolder = line.split()[2]
+                path_to_sins_input_folder = line.split()[2]
             elif 'NAME_OF_SINS_PROJECT' in line:
-                nameOfSINSProject = line.split()[2]
+                name_of_sins_project = line.split()[2]
             elif 'PATH_TO_SINSSAMPLER_INPUT_FOLDER' in line:
-                addressOfInputFolder = line.split()[2]
+                address_of_input_folder = line.split()[2]
 
-
-    addressOfPrefFile = pathToSINSInputFolder + nameOfSINSProject + "/output_preferences.txt"
-    addressOfWorldFile = pathToSINSInputFolder + nameOfSINSProject + "/world.txt"
-
+    address_of_pref_file = path_to_sins_input_folder + name_of_sins_project + "/output_preferences.txt"
+    address_of_world_file = path_to_sins_input_folder + name_of_sins_project + "/world.txt"
 
     '''
     open file sequentially and search for string in line
     '''
-    with open(addressOfPrefFile, 'r') as inF:
+    with open(address_of_pref_file, 'r') as inF:
         for line in inF:
             if 'generationsIntervalgen' in line:
                 global generationsSampledInterval
                 generationsSampledInterval = int(line.split()[1])
             elif 'recStart' in line:
-                recordingStartsAtGen = int(line.split()[1])
+                recording_starts_at_gen = int(line.split()[1])
 
-
-    nameOfLayer = ''
-    with open(addressOfWorldFile, 'r') as inF:
+    name_of_layer = ''
+    with open(address_of_world_file, 'r') as inF:
         for line in inF:
             if 'numberOfGenerations' in line:
                 global numberOfGenerations
                 numberOfGenerations = int(line.split()[1])
             elif 'layerName' in line:
-                nameOfLayer += line.split()[1] + "\n"
-            elif 'numberOfLayers' in line:
-                numberOfLayers = line.split()[1]
+                name_of_layer += line.split()[1] + "\n"
+            elif 'number_of_layers' in line:
+                number_of_layers = line.split()[1]
 
-    addressOfGenotypeFile = pathToSINSInputFolder + nameOfSINSProject +"/genetics/"+nameOfLayer.split("\n")[0]+"/genotype.txt"
+    address_of_genotype_file = path_to_sins_input_folder + name_of_sins_project + "/genetics/" + name_of_layer.split("\n")[0] + "/genotype.txt"
 
-    typeOfChromosomeA = ''
-    with open(addressOfGenotypeFile, 'r') as inF:
+    with open(address_of_genotype_file, 'r') as inF:
         for line in inF:
             if 'typeX' in line:
-                typeOfChromosomeX = line
+                type_of_chromosome_x = line
             elif 'typeY' in line:
-                typeOfChromosomeY = line
+                type_of_chromosome_y = line
             elif 'typeMT' in line:
-                typeOfChromosomeMT = line
+                type_of_chromosome_mt = line
             elif 'typeA' in line:
-                typeOfChromosomeA += line + "\n"
+                type_of_chromosome_a += line + "\n"
             elif 'nbAutosomes' in line:
-                numberOfAutosomesLine = line
+                number_of_autosomes_line = line
 
     '''
     Creates sampling files necessary for SinsSampler to run
     '''
     ''''Create config.txt'''
-    configFile = open(addressOfInputFolder + 'config'+simulationName+'.txt', 'w+')
-    configFile.write("inputInformation\n"
-                     "layerNumber " + numberOfLayers + "\n" +
-                     nameOfLayer +
-                     numberOfAutosomesLine +
-                     typeOfChromosomeX +
-                     typeOfChromosomeY +
-                     typeOfChromosomeMT +
-                     typeOfChromosomeA)
+    config_file = open(address_of_input_folder + 'config' + simulation_name + '.txt', 'w+')
+    config_file.write("inputInformation\n"
+                      "layerNumber " + number_of_layers + "\n" +
+                      name_of_layer +
+                      number_of_autosomes_line +
+                      type_of_chromosome_x +
+                      type_of_chromosome_y +
+                      type_of_chromosome_mt +
+                      type_of_chromosome_a)
 
     '''Create generation.txt'''
-    if os.path.isfile(addressOfInputFolder + 'generations.txt'):
-        generationFile = open(addressOfInputFolder + 'generations.txt', 'w+')
+    if os.path.isfile(address_of_input_folder + 'generations.txt'):
+        generation_file = open(address_of_input_folder + 'generations.txt', 'w+')
     else:
-        generationFile = open(addressOfInputFolder + 'generations.txt', 'a')
+        generation_file = open(address_of_input_folder + 'generations.txt', 'a')
 
-    for i in range(recordingStartsAtGen, numberOfGenerations + 1, generationsSampledInterval):
+    for i in range(recording_starts_at_gen, numberOfGenerations + 1, generationsSampledInterval):
         print i
-        generationFile.write(str(i) + "\n")
+        generation_file.write(str(i) + "\n")
 
-    generationFile.close()
+    generation_file.close()
 
     '''
     Create sampling[generation].txt
@@ -107,9 +113,9 @@ def main(simulationName):
     "layer0 8 8 10 10"
     '''
     # range(initial generation, number of generations + 1, generations sampling interval)
-    for i in range(recordingStartsAtGen, numberOfGenerations + 1, generationsSampledInterval):
+    for i in range(recording_starts_at_gen, numberOfGenerations + 1, generationsSampledInterval):
         print i
-        samplingFile = open(addressOfInputFolder + 'sampling' + str(i) + '.txt', 'w+')
-        samplingFile.write("PopulationName DemeLine DemeColumn NumMale NumFemale\n"
-                           "layerOne 0 0 10 10\n")
-        samplingFile.close()
+        sampling_file = open(address_of_input_folder + 'sampling' + str(i) + '.txt', 'w+')
+        sampling_file.write("PopulationName DemeLine DemeColumn NumMale NumFemale\n"
+                            "layerOne 0 0 10 10\n")
+        sampling_file.close()
