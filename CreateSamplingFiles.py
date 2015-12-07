@@ -30,6 +30,8 @@ def main(simulationName):
             if 'generationsIntervalgen' in line:
                 global generationsSampledInterval
                 generationsSampledInterval = int(line.split()[1])
+            elif 'recStart' in line:
+                recordingStartsAtGen = int(line.split()[1])
 
 
     nameOfLayer = ''
@@ -79,7 +81,7 @@ def main(simulationName):
     else:
         generationFile = open(addressOfInputFolder + 'generations.txt', 'a')
 
-    for i in range(0, numberOfGenerations + 1, generationsSampledInterval):
+    for i in range(recordingStartsAtGen, numberOfGenerations + 1, generationsSampledInterval):
         print i
         generationFile.write(str(i) + "\n")
 
@@ -105,7 +107,7 @@ def main(simulationName):
     "layer0 8 8 10 10"
     '''
     # range(initial generation, number of generations + 1, generations sampling interval)
-    for i in range(0, numberOfGenerations + 1, generationsSampledInterval):
+    for i in range(recordingStartsAtGen, numberOfGenerations + 1, generationsSampledInterval):
         print i
         samplingFile = open(addressOfInputFolder + 'sampling' + str(i) + '.txt', 'w+')
         samplingFile.write("PopulationName DemeLine DemeColumn NumMale NumFemale\n"

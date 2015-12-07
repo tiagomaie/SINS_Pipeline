@@ -188,7 +188,7 @@ print subprocess.Popen(cmdExecuteArlequinOutputParser, stdout=subprocess.PIPE, c
 
 if isTableAdaptedToR:
     # note that the third argument stand for "initial generation"
-    cmdExecuteOutputRGraphs = "Rscript arlequinOutputToGraphs.r \"" + ouputFolderArlequinOutputParser + "\" \"A1_output_Exp\" 0 " + str(CreateSamplingFiles.numberOfGenerations) + " " + str(CreateSamplingFiles.generationsSampledInterval) + " " + projectName
+    cmdExecuteOutputRGraphs = "Rscript arlequinOutputToGraphs.r \"" + ouputFolderArlequinOutputParser + "\" \"A1_output_Exp\" 0 " + str(CreateSamplingFiles.numberOfGenerations) + " " + str(CreateSamplingFiles.generationsSampledInterval) + " " + projectName + " " + pathToRScriptFolder
     cmdExecuteOutputRGraphs = shlex.split(cmdExecuteOutputRGraphs)
     subprocess.Popen(cmdExecuteOutputRGraphs, stdout=subprocess.PIPE, cwd=pathToRScriptFolder).stdout.read()
 

@@ -8,6 +8,8 @@
 # For example:
 #   /home/user/this/is/an/absolute/path/
 #   ./this/is/not
+# If the folders don't already exist, you dont have to create them, just provide the path
+# to where you would like the folder to be (including the folder name itself)
 OPTIONS 1337
 
 PROJECT_NAME = ParamPipelineTest
@@ -28,7 +30,7 @@ PATH_TO_OUTPUT_FOLDER_SINSSAMPLER = /home/tiago/Documents/PipelineTestFolder/SIN
 # AGGREGATE SINS
 PATH_TO_AGGREGATESINS_DIST_FOLDER = /home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/
 PATH_TO_OUTPUT_FOLDER_AGGREGATESINS = /home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/output/AggregatedFiles_Test/
-NUMBER_OF_CHROMOSOMES = 4 # number of chromosome to be analyzed
+NUMBER_OF_CHROMOSOMES = 4 # number of chromosomes to be analyzed
 
 # ARLEQUIN
 PATH_TO_ARLEQUIN_FOLDER = /home/tiago/Documents/PipelineTestFolder/Arlequin/
