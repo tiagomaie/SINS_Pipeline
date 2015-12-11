@@ -12,8 +12,8 @@ def check_if_path_is_dir(the_input_path):
 def main():
     with open("./Input_SINS_Pipeline.par", 'r') as inF:
         for line in inF:
-            if 'PATH_TO_' in line:
-                if line.split()[0] != '#':
+            if line[0] != '#':
+                if 'PATH_TO_' in line:
                     path_to_a_folder = line.split()[2]
                     print path_to_a_folder
                     check_if_path_is_dir(path_to_a_folder)

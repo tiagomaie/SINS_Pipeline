@@ -24,12 +24,13 @@ def main(simulation_name):
 
     with open("./Input_SINS_Pipeline.par", 'r') as inF:
         for line in inF:
-            if 'PATH_TO_SINS_INPUT_FOLDER' in line:
-                path_to_sins_input_folder = line.split()[2]
-            elif 'NAME_OF_SINS_PROJECT' in line:
-                name_of_sins_project = line.split()[2]
-            elif 'PATH_TO_SINSSAMPLER_INPUT_FOLDER' in line:
-                address_of_input_folder = line.split()[2]
+            if line[0] != '#':
+                if 'PATH_TO_SINS_INPUT_FOLDER' in line:
+                    path_to_sins_input_folder = line.split()[2]
+                elif 'NAME_OF_SINS_PROJECT' in line:
+                    name_of_sins_project = line.split()[2]
+                elif 'PATH_TO_SINSSAMPLER_INPUT_FOLDER' in line:
+                    address_of_input_folder = line.split()[2]
 
     address_of_pref_file = path_to_sins_input_folder + name_of_sins_project + "/output_preferences.txt"
     address_of_world_file = path_to_sins_input_folder + name_of_sins_project + "/world.txt"
@@ -116,10 +117,26 @@ def main(simulation_name):
     "layer0 8 4 10 10\n"
     "layer0 8 8 10 10"
     '''
+    # stores whatever is inside the [SINS_SAMPLER_SAMPLING_SCHEME] tags and then prints it
+    # to the sampling txt files
+    the_sampling_scheme = ''
+    with open("./Input_SINS_Pipeline.par", 'r') as inF:
+        my_switch = False
+        for line in inF:
+            if line[0] != '#':
+                if '[SINS_SAMPLER_SAMPLING_SCHEME]' in line:
+                    my_switch = True
+                elif '[/SINS_SAMPLER_SAMPLING_SCHEME]' in line:
+                    my_switch = False
+                elif my_switch:
+                    the_sampling_scheme += line
+        print '\033[1;32;40mThe sampling scheme options are as follows:\033[0;0m'
+        print the_sampling_scheme
+
+
     # range(initial generation, number of generations + 1, generations sampling interval)
     for i in range(recording_starts_at_gen, numberOfGenerations + 1, generationsSampledInterval):
         # print i
         sampling_file = open(address_of_input_folder + 'sampling' + str(i) + '.txt', 'w+')
-        sampling_file.write("PopulationName DemeLine DemeColumn NumMale NumFemale\n"
-                            "layerOne 0 0 10 10\n")
+        sampling_file.write(the_sampling_scheme)
         sampling_file.close()

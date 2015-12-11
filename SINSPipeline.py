@@ -6,8 +6,10 @@ import os.path
 from CreateSamplingFiles import *
 import Input_Helper
 import sys
+import time
+from datetime import timedelta
 
-
+start_time = time.time()
 '''
 Pipeline designed by me, Tiago Maie
 In the future, if I have time, check other already designed libraries that would allow me to make a pipeline.
@@ -42,52 +44,53 @@ open file sequentially and search for string in line
 # Parse parameter file
 with open("./Input_SINS_Pipeline.par", 'r') as inF:
     for line in inF:
-        if 'OPTIONS' in line:
-            option = int(line.split()[1])
-            print option
-        elif 'PROJECT_NAME' in line:
-            projectName = line.split()[2]
-        # sins
-        elif 'PATH_TO_SINS_DIST_FOLDER' in line:
-            pathToSINSdistFolder = line.split()[2]
-        elif 'NAME_OF_SINS_PROJECT' in line:
-            nameOfSINSProject = line.split()[2]
-        elif 'NUMBER_OF_SIMULATIONS' in line:
-            numberOfSimulations = int(line.split()[2])
+        if line[0] != '#':
+            if 'OPTIONS' in line:
+                option = int(line.split()[1])
+                print option
+            elif 'PROJECT_NAME' in line:
+                projectName = line.split()[2]
+            # sins
+            elif 'PATH_TO_SINS_DIST_FOLDER' in line:
+                pathToSINSdistFolder = line.split()[2]
+            elif 'NAME_OF_SINS_PROJECT' in line:
+                nameOfSINSProject = line.split()[2]
+            elif 'NUMBER_OF_SIMULATIONS' in line:
+                numberOfSimulations = int(line.split()[2])
 
-        # sins sampler
-        elif 'NAME_OF_SINSSAMPLER_SIMULATION' in line:
-            nameOfSINSSamplerSimulation = line.split()[2]
-        elif 'PATH_TO_OUTPUT_FOLDER_SINSSAMPLER' in line:
-            outputFolderSINSSampler = line.split()[2]
-        elif 'PATH_TO_SINSSAMPLER_DIST_FOLDER' in line:
-            pathToSINSSAMPLERdistFolder = line.split()[2]
-        # aggregate sins
-        elif 'PATH_TO_OUTPUT_FOLDER_AGGREGATESINS' in line:
-            outputFolderAggregate = line.split()[2]
-        elif 'PATH_TO_AGGREGATESINS_DIST_FOLDER' in line:
-            pathToAGGREGATESINSdistFolder = line.split()[2]
-        elif 'NUMBER_OF_CHROMOSOMES' in line:
-            numberOfZomes = int(line.split()[2])
-        # arlequin
-        elif 'PATH_TO_ARLEQUIN_FOLDER' in line:
-            arlequinFolder = line.split()[2]
-        elif 'NAME_OF_LAUNCH_ARLECORE_SCRIPT' in line:
-            launchArlecore = line.split()[2]
-        elif 'NAME_OF_ARLEQUIN_SETTINGS_FILE' in line:
-            arlequinSettingsFile = line.split()[2]
-        elif 'NAME_OF_ARLEQUIN_EXECUTABLE_FILE' in line:
-            arlequinExecutable = line.split()[2]
-        # arlequin output parser
-        elif 'IS_TABLE_ADAPTED_TO_R' in line:
-            isTableAdaptedToR = bool(line.split()[2])
-        elif 'PATH_TO_OUPUT_FOLDER_ARLEQUINOUTPUTPARSER' in line:
-            ouputFolderArlequinOutputParser = line.split()[2]
-        elif 'PATH_TO_ARLEQUINOUTPUTPARSER_DIST_FOLDER' in line:
-            pathToARLEQOUTPUTPARSERdistFolder = line.split()[2]
-        # parsed output to graphs
-        elif 'PATH_TO_R_SCRIPT_FOLDER' in line:
-            pathToRScriptFolder = line.split()[2]
+            # sins sampler
+            elif 'NAME_OF_SINSSAMPLER_SIMULATION' in line:
+                nameOfSINSSamplerSimulation = line.split()[2]
+            elif 'PATH_TO_OUTPUT_FOLDER_SINSSAMPLER' in line:
+                outputFolderSINSSampler = line.split()[2]
+            elif 'PATH_TO_SINSSAMPLER_DIST_FOLDER' in line:
+                pathToSINSSAMPLERdistFolder = line.split()[2]
+            # aggregate sins
+            elif 'PATH_TO_OUTPUT_FOLDER_AGGREGATESINS' in line:
+                outputFolderAggregate = line.split()[2]
+            elif 'PATH_TO_AGGREGATESINS_DIST_FOLDER' in line:
+                pathToAGGREGATESINSdistFolder = line.split()[2]
+            elif 'NUMBER_OF_CHROMOSOMES' in line:
+                numberOfZomes = int(line.split()[2])
+            # arlequin
+            elif 'PATH_TO_ARLEQUIN_FOLDER' in line:
+                arlequinFolder = line.split()[2]
+            elif 'NAME_OF_LAUNCH_ARLECORE_SCRIPT' in line:
+                launchArlecore = line.split()[2]
+            elif 'NAME_OF_ARLEQUIN_SETTINGS_FILE' in line:
+                arlequinSettingsFile = line.split()[2]
+            elif 'NAME_OF_ARLEQUIN_EXECUTABLE_FILE' in line:
+                arlequinExecutable = line.split()[2]
+            # arlequin output parser
+            elif 'IS_TABLE_ADAPTED_TO_R' in line:
+                isTableAdaptedToR = bool(line.split()[2])
+            elif 'PATH_TO_OUPUT_FOLDER_ARLEQUINOUTPUTPARSER' in line:
+                ouputFolderArlequinOutputParser = line.split()[2]
+            elif 'PATH_TO_ARLEQUINOUTPUTPARSER_DIST_FOLDER' in line:
+                pathToARLEQOUTPUTPARSERdistFolder = line.split()[2]
+            # parsed output to graphs
+            elif 'PATH_TO_R_SCRIPT_FOLDER' in line:
+                pathToRScriptFolder = line.split()[2]
 
 
 # main project
@@ -145,6 +148,9 @@ PipelineTestFolder
 
 # SINS2
 if sys.argv.count("1"):
+
+    print "Step 1 - SINS - is running."
+
     cmdExecuteSINS = "java -jar SINS2.jar  -projectName \"" + nameOfSINSProject + \
                      "\" -formati fZip -numberOfSimulation " + str(numberOfSimulations) + " -takeSampledParametersFromFile yes"
     cmdExecuteSINS = shlex.split(cmdExecuteSINS)
@@ -154,12 +160,17 @@ if sys.argv.count("1"):
     SINSprocess = subprocess.Popen(cmdExecuteSINS, stdout=subprocess.PIPE, cwd=pathToSINSdistFolder).stdout.read()
     print SINSprocess
 
+    print "Step 1 has finished."
+
 
 # SINSSampler
 
 CreateSamplingFiles.main(nameOfSINSSamplerSimulation)
 
 if sys.argv.count("2"):
+
+    print "Step 2 - SINS Sampler - is running."
+
     if os.path.isdir(outputFolderSINSSampler):
         shutil.rmtree(outputFolderSINSSampler)
 
@@ -168,10 +179,15 @@ if sys.argv.count("2"):
 
     subprocess.Popen(cmdExecuteSinsSampler, stdout=subprocess.PIPE, cwd=pathToSINSSAMPLERdistFolder).stdout.read()
 
+    print "Step 2 has finished."
+
 
 # Aggregate
 
 if sys.argv.count("3"):
+
+    print "Step 3 - Aggregate SINS Sampler files - is running."
+
     if os.path.isdir(outputFolderAggregate):
         shutil.rmtree(outputFolderAggregate)
 
@@ -180,10 +196,15 @@ if sys.argv.count("3"):
     cmdExecuteAggregate = shlex.split(cmdExecuteAggregate)
     subprocess.Popen(cmdExecuteAggregate, stdout=subprocess.PIPE, cwd=pathToAGGREGATESINSdistFolder).stdout.read()
 
+    print "Step 3 has finished."
+
 
 # Arlequin
 
 if sys.argv.count("4"):
+
+    print "Step 4 - Arlequin - is running."
+
     # checks if files exist before trying to copy them
     if os.path.isfile(arlequinFolder + launchArlecore):
         shutil.copy(arlequinFolder + launchArlecore, outputFolderAggregate)
@@ -202,10 +223,15 @@ if sys.argv.count("4"):
 
     subprocess.Popen(cmdExecuteLaunchArlequin, stdout=subprocess.PIPE, cwd=outputFolderAggregate).stdout.read()
 
+    print "Step 4 has finished."
+
 
 # ArlequinOutputParser
 
 if sys.argv.count("5"):
+
+    print "Step 5 - Arlequin Output Parser - is running."
+
     if os.path.isdir(ouputFolderArlequinOutputParser):
         shutil.rmtree(ouputFolderArlequinOutputParser)
 
@@ -214,19 +240,28 @@ if sys.argv.count("5"):
     cmdExecuteArlequinOutputParser = shlex.split(cmdExecuteArlequinOutputParser)
     subprocess.Popen(cmdExecuteArlequinOutputParser, stdout=subprocess.PIPE, cwd=pathToARLEQOUTPUTPARSERdistFolder).stdout.read()
 
+    print "Step 5 has finished."
+
 
 # R script
 
 if sys.argv.count("6"):
+
+    print "Step 6 - Parsed Output to Graphs - is running."
+
     if isTableAdaptedToR:
         # note that the third argument stand for "initial generation"
         cmdExecuteOutputRGraphs = "Rscript arlequinOutputToGraphs.r \"" + ouputFolderArlequinOutputParser + "\" \"A1_output_Exp\" 0 " + str(CreateSamplingFiles.numberOfGenerations) + " " + str(CreateSamplingFiles.generationsSampledInterval) + " " + projectName + " " + pathToRScriptFolder
         cmdExecuteOutputRGraphs = shlex.split(cmdExecuteOutputRGraphs)
         subprocess.Popen(cmdExecuteOutputRGraphs, stdout=subprocess.PIPE, cwd=pathToRScriptFolder).stdout.read()
 
+    print "Step 6 has finished."
+
 
 print "The SINS pipeline has finished."
-
+end_time = time.time()
+elapsed_time = end_time - start_time
+print "Elapsed time: " + str(timedelta(seconds=elapsed_time))
 '''
 commandToExecute = "some bash command -l"
 

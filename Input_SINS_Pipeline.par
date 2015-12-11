@@ -14,11 +14,15 @@ OPTIONS 1337
 
 PROJECT_NAME = ParamPipelineTest
 
+
+
 # SINS
 PATH_TO_SINS_DIST_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINS/dist/
 PATH_TO_SINS_INPUT_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINS/dist/input/
 NAME_OF_SINS_PROJECT = PipelineTestSimulation
 NUMBER_OF_SIMULATIONS = 1 # number of simulations to be performed
+
+
 
 # SINS SAMPLER
 NAME_OF_SINSSAMPLER_SIMULATION = PipelinePARAM_SSampler
@@ -26,17 +30,37 @@ PATH_TO_SINSSAMPLER_DIST_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINSS
 PATH_TO_SINSSAMPLER_INPUT_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINSSampler/dist/input/
 PATH_TO_OUTPUT_FOLDER_SINSSAMPLER = /home/tiago/Documents/PipelineTestFolder/SINSSampler/dist/output/
 
+[SINS_SAMPLER_SAMPLING_SCHEME]
+PopulationName DemeLine DemeColumn NumMale NumFemale
+layerOne 0 0 10 10
+layerOne 0 4 10 10
+layerOne 0 8 10 10
+layerOne 2 2 10 10
+layerOne 2 6 10 10
+layerOne 4 0 10 10
+layerOne 4 4 10 10
+layerOne 4 8 10 10
+layerOne 6 2 10 10
+layerOne 6 6 10 10
+layerOne 8 0 10 10
+layerOne 8 4 10 10
+layerOne 8 8 10 10
+[/SINS_SAMPLER_SAMPLING_SCHEME]
 
 # AGGREGATE SINS
 PATH_TO_AGGREGATESINS_DIST_FOLDER = /home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/
 PATH_TO_OUTPUT_FOLDER_AGGREGATESINS = /home/tiago/Documents/PipelineTestFolder/AggregateSINSSamplerFiles/dist/output/AggregatedFiles_Test/
 NUMBER_OF_CHROMOSOMES = 4 # number of chromosomes to be analyzed
 
+
+
 # ARLEQUIN
 PATH_TO_ARLEQUIN_FOLDER = /home/tiago/Documents/PipelineTestFolder/Arlequin/
 NAME_OF_LAUNCH_ARLECORE_SCRIPT = LaunchArlecore.sh # if you are not sure, do not touch this
 NAME_OF_ARLEQUIN_SETTINGS_FILE = arl_run.ars # if you are not sure, do not touch this
 NAME_OF_ARLEQUIN_EXECUTABLE_FILE = arlecore3522_64bit # if you are not sure, do not touch this
+
+
 
 # ARLEQUIN OUTPUT PARSER
 IS_TABLE_ADAPTED_TO_R = True # (True or False) R script will not work if this is defined to False
