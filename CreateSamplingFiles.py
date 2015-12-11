@@ -6,17 +6,21 @@ Currently I only tested it with a single autosome and a single layer. Need to ru
 '''
 
 
+'''
+path_to_sins_input_folder = ''
+name_of_sins_project = ''
+address_of_input_folder = ''
+number_of_layers = ''
+number_of_autosomes_line = ''
+type_of_chromosome_x = ''
+type_of_chromosome_y = ''
+type_of_chromosome_mt = ''
+type_of_chromosome_a = ''
+recording_starts_at_gen = ''
+'''
+
+
 def main(simulation_name):
-    path_to_sins_input_folder = None
-    name_of_sins_project = None
-    address_of_input_folder = None
-    number_of_layers = None
-    number_of_autosomes_line = None
-    type_of_chromosome_x = None
-    type_of_chromosome_y = None
-    type_of_chromosome_mt = None
-    type_of_chromosome_a = None
-    recording_starts_at_gen = None
 
     with open("./Input_SINS_Pipeline.par", 'r') as inF:
         for line in inF:
@@ -49,11 +53,11 @@ def main(simulation_name):
                 numberOfGenerations = int(line.split()[1])
             elif 'layerName' in line:
                 name_of_layer += line.split()[1] + "\n"
-            elif 'number_of_layers' in line:
+            elif 'numberOfLayers' in line:
                 number_of_layers = line.split()[1]
 
     address_of_genotype_file = path_to_sins_input_folder + name_of_sins_project + "/genetics/" + name_of_layer.split("\n")[0] + "/genotype.txt"
-
+    type_of_chromosome_a = ''
     with open(address_of_genotype_file, 'r') as inF:
         for line in inF:
             if 'typeX' in line:
@@ -88,7 +92,7 @@ def main(simulation_name):
         generation_file = open(address_of_input_folder + 'generations.txt', 'a')
 
     for i in range(recording_starts_at_gen, numberOfGenerations + 1, generationsSampledInterval):
-        print i
+        # print i
         generation_file.write(str(i) + "\n")
 
     generation_file.close()
@@ -114,7 +118,7 @@ def main(simulation_name):
     '''
     # range(initial generation, number of generations + 1, generations sampling interval)
     for i in range(recording_starts_at_gen, numberOfGenerations + 1, generationsSampledInterval):
-        print i
+        # print i
         sampling_file = open(address_of_input_folder + 'sampling' + str(i) + '.txt', 'w+')
         sampling_file.write("PopulationName DemeLine DemeColumn NumMale NumFemale\n"
                             "layerOne 0 0 10 10\n")

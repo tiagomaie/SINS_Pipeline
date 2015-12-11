@@ -4,7 +4,37 @@ import shutil
 import CreateSamplingFiles
 import os.path
 from CreateSamplingFiles import *
+import Input_Helper
+import sys
 
+
+'''
+Pipeline designed by me, Tiago Maie
+In the future, if I have time, check other already designed libraries that would allow me to make a pipeline.
+ruffus or makefile for example
+
+This pipeline is divided into 6 steps
+1 - SINS
+2 - SINSSampler
+3 - AggregateSins
+4 - Arlequin
+5 - ArlequinOutputParser
+6 - ParsedOutputToGraphs
+
+When running the pipeline one has to specify in the command line the steps that will be performed
+For example to run the full pipeline one would write
+>python SINSPipeline.py 1 2 3 4 5 6
+
+To run everything but the first step, one would write
+>python SINSPipeline.py 2 3 4 5 6
+
+Please note that this pipeline needs to run sequentially that is, you cannot skip steps.
+For example YOU SHOULD NOT DO THIS:
+>python SINSPipeline.py 1 2 5 6
+'''
+print(str(sys.argv))
+# Before doing anything else, checks if the paths given in the par file are in a nice format (aka finish with '/' char)
+Input_Helper.main()
 
 '''
 open file sequentially and search for string in line
@@ -114,83 +144,85 @@ PipelineTestFolder
 '''
 
 # SINS2
-
-cmdExecuteSINS = "java -jar SINS2.jar  -projectName \"" + nameOfSINSProject + \
-                 "\" -formati fZip -numberOfSimulation " + str(numberOfSimulations) + " -takeSampledParametersFromFile yes"
-cmdExecuteSINS = shlex.split(cmdExecuteSINS)
-
-# change SINS so that maybe the file not found exception doesnt happen
-# maybe a nice way to implement it is just to assume nothing, and give the user the option to pass the parameters
-# aka the folders where the files needed are
-SINSprocess = subprocess.Popen(cmdExecuteSINS, stdout=subprocess.PIPE, cwd=pathToSINSdistFolder).stdout.read()
-print SINSprocess
+if sys.argv.count("1"):
+    cmdExecuteSINS = "java -jar SINS2.jar  -projectName \"" + nameOfSINSProject + \
+                     "\" -formati fZip -numberOfSimulation " + str(numberOfSimulations) + " -takeSampledParametersFromFile yes"
+    cmdExecuteSINS = shlex.split(cmdExecuteSINS)
+    # change SINS so that maybe the file not found exception doesnt happen
+    # maybe a nice way to implement it is just to assume nothing, and give the user the option to pass the parameters
+    # aka the folders where the files needed are
+    SINSprocess = subprocess.Popen(cmdExecuteSINS, stdout=subprocess.PIPE, cwd=pathToSINSdistFolder).stdout.read()
+    print SINSprocess
 
 
 # SINSSampler
 
-
-if os.path.isdir(outputFolderSINSSampler):
-    shutil.rmtree(outputFolderSINSSampler)
-
-cmdExecuteSinsSampler = "java -jar SinsSampler.jar -input \""+pathToSINSdistFolder+"results/" + nameOfSINSProject + "\" -numberOfSimulation 1 -output \"" + outputFolderSINSSampler + "\" -simulationName \"" + nameOfSINSSamplerSimulation + "\""
-cmdExecuteSinsSampler = shlex.split(cmdExecuteSinsSampler)
-
 CreateSamplingFiles.main(nameOfSINSSamplerSimulation)
 
-subprocess.Popen(cmdExecuteSinsSampler, stdout=subprocess.PIPE, cwd=pathToSINSSAMPLERdistFolder).stdout.read()
+if sys.argv.count("2"):
+    if os.path.isdir(outputFolderSINSSampler):
+        shutil.rmtree(outputFolderSINSSampler)
+
+    cmdExecuteSinsSampler = "java -jar SinsSampler.jar -input \""+pathToSINSdistFolder+"results/" + nameOfSINSProject + "\" -numberOfSimulation 1 -output \"" + outputFolderSINSSampler + "\" -simulationName \"" + nameOfSINSSamplerSimulation + "\""
+    cmdExecuteSinsSampler = shlex.split(cmdExecuteSinsSampler)
+
+    subprocess.Popen(cmdExecuteSinsSampler, stdout=subprocess.PIPE, cwd=pathToSINSSAMPLERdistFolder).stdout.read()
 
 
 # Aggregate
 
+if sys.argv.count("3"):
+    if os.path.isdir(outputFolderAggregate):
+        shutil.rmtree(outputFolderAggregate)
 
-if os.path.isdir(outputFolderAggregate):
-    shutil.rmtree(outputFolderAggregate)
+    cmdExecuteAggregate = "java -jar AggregateSINSSamplerFiles.jar -input \"" + outputFolderSINSSampler + "/ARLsimulation_1/\" -output \"" + outputFolderAggregate + "\" -zomeNumber "+str(numberOfZomes)
 
-cmdExecuteAggregate = "java -jar AggregateSINSSamplerFiles.jar -input \"" + outputFolderSINSSampler + "/ARLsimulation_1/\" -output \"" + outputFolderAggregate + "\" -zomeNumber "+str(numberOfZomes)
-
-cmdExecuteAggregate = shlex.split(cmdExecuteAggregate)
-print subprocess.Popen(cmdExecuteAggregate, stdout=subprocess.PIPE, cwd=pathToAGGREGATESINSdistFolder).stdout.read()
+    cmdExecuteAggregate = shlex.split(cmdExecuteAggregate)
+    subprocess.Popen(cmdExecuteAggregate, stdout=subprocess.PIPE, cwd=pathToAGGREGATESINSdistFolder).stdout.read()
 
 
 # Arlequin
 
-# checks if files exist before trying to copy them
-if os.path.isfile(arlequinFolder + launchArlecore):
-    shutil.copy(arlequinFolder + launchArlecore, outputFolderAggregate)
-if os.path.isfile(arlequinFolder + arlequinSettingsFile):
-    shutil.copy(arlequinFolder + arlequinSettingsFile, outputFolderAggregate)
-if os.path.isfile(arlequinFolder + arlequinExecutable):
-    shutil.copy(arlequinFolder + arlequinExecutable, outputFolderAggregate)
+if sys.argv.count("4"):
+    # checks if files exist before trying to copy them
+    if os.path.isfile(arlequinFolder + launchArlecore):
+        shutil.copy(arlequinFolder + launchArlecore, outputFolderAggregate)
+    if os.path.isfile(arlequinFolder + arlequinSettingsFile):
+        shutil.copy(arlequinFolder + arlequinSettingsFile, outputFolderAggregate)
+    if os.path.isfile(arlequinFolder + arlequinExecutable):
+        shutil.copy(arlequinFolder + arlequinExecutable, outputFolderAggregate)
 
-cmdExecuteLaunchArlequin = "./LaunchArlecore.sh " + arlequinExecutable + " " + arlequinSettingsFile
-cmdExecuteLaunchArlequin = shlex.split(cmdExecuteLaunchArlequin)
+    cmdExecuteLaunchArlequin = "./LaunchArlecore.sh " + arlequinExecutable + " " + arlequinSettingsFile
+    cmdExecuteLaunchArlequin = shlex.split(cmdExecuteLaunchArlequin)
 
-# give the user permission to execute to the file
-cmdToGivePermission = "chmod u+x " + launchArlecore
-cmdToGivePermission = shlex.split(cmdToGivePermission)
-subprocess.Popen(cmdToGivePermission, stdout=subprocess.PIPE, cwd=outputFolderAggregate).stdout.read()
+    # give the user permission to execute to the file
+    cmdToGivePermission = "chmod u+x " + launchArlecore
+    cmdToGivePermission = shlex.split(cmdToGivePermission)
+    subprocess.Popen(cmdToGivePermission, stdout=subprocess.PIPE, cwd=outputFolderAggregate).stdout.read()
 
-print subprocess.Popen(cmdExecuteLaunchArlequin, stdout=subprocess.PIPE, cwd=outputFolderAggregate).stdout.read()
+    subprocess.Popen(cmdExecuteLaunchArlequin, stdout=subprocess.PIPE, cwd=outputFolderAggregate).stdout.read()
 
 
 # ArlequinOutputParser
 
-if os.path.isdir(ouputFolderArlequinOutputParser):
-    shutil.rmtree(ouputFolderArlequinOutputParser)
+if sys.argv.count("5"):
+    if os.path.isdir(ouputFolderArlequinOutputParser):
+        shutil.rmtree(ouputFolderArlequinOutputParser)
 
-cmdExecuteArlequinOutputParser = "java -jar ArlequinOutputParser.jar -input \"" + outputFolderAggregate + "\" -isTableAdaptedToR " + str(
-    isTableAdaptedToR).lower() + " -output " + ouputFolderArlequinOutputParser
-cmdExecuteArlequinOutputParser = shlex.split(cmdExecuteArlequinOutputParser)
-print subprocess.Popen(cmdExecuteArlequinOutputParser, stdout=subprocess.PIPE, cwd=pathToARLEQOUTPUTPARSERdistFolder).stdout.read()
+    cmdExecuteArlequinOutputParser = "java -jar ArlequinOutputParser.jar -input \"" + outputFolderAggregate + "\" -isTableAdaptedToR " + str(
+        isTableAdaptedToR).lower() + " -output " + ouputFolderArlequinOutputParser
+    cmdExecuteArlequinOutputParser = shlex.split(cmdExecuteArlequinOutputParser)
+    subprocess.Popen(cmdExecuteArlequinOutputParser, stdout=subprocess.PIPE, cwd=pathToARLEQOUTPUTPARSERdistFolder).stdout.read()
 
 
 # R script
 
-if isTableAdaptedToR:
-    # note that the third argument stand for "initial generation"
-    cmdExecuteOutputRGraphs = "Rscript arlequinOutputToGraphs.r \"" + ouputFolderArlequinOutputParser + "\" \"A1_output_Exp\" 0 " + str(CreateSamplingFiles.numberOfGenerations) + " " + str(CreateSamplingFiles.generationsSampledInterval) + " " + projectName + " " + pathToRScriptFolder
-    cmdExecuteOutputRGraphs = shlex.split(cmdExecuteOutputRGraphs)
-    subprocess.Popen(cmdExecuteOutputRGraphs, stdout=subprocess.PIPE, cwd=pathToRScriptFolder).stdout.read()
+if sys.argv.count("6"):
+    if isTableAdaptedToR:
+        # note that the third argument stand for "initial generation"
+        cmdExecuteOutputRGraphs = "Rscript arlequinOutputToGraphs.r \"" + ouputFolderArlequinOutputParser + "\" \"A1_output_Exp\" 0 " + str(CreateSamplingFiles.numberOfGenerations) + " " + str(CreateSamplingFiles.generationsSampledInterval) + " " + projectName + " " + pathToRScriptFolder
+        cmdExecuteOutputRGraphs = shlex.split(cmdExecuteOutputRGraphs)
+        subprocess.Popen(cmdExecuteOutputRGraphs, stdout=subprocess.PIPE, cwd=pathToRScriptFolder).stdout.read()
 
 
 print "The SINS pipeline has finished."
