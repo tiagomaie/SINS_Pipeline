@@ -53,11 +53,12 @@ with open("./Input_SINS_Pipeline.par", 'r') as inF:
             # sins
             elif 'PATH_TO_SINS_DIST_FOLDER' in line:
                 pathToSINSdistFolder = line.split()[2]
+            elif 'PATH_TO_SINS_OUTPUT_FOLDER' in line:
+                outputFolderSINS = line.split()[2]
             elif 'NAME_OF_SINS_PROJECT' in line:
                 nameOfSINSProject = line.split()[2]
             elif 'NUMBER_OF_SIMULATIONS' in line:
                 numberOfSimulations = int(line.split()[2])
-
             # sins sampler
             elif 'NAME_OF_SINSSAMPLER_SIMULATION' in line:
                 nameOfSINSSamplerSimulation = line.split()[2]
@@ -150,6 +151,9 @@ PipelineTestFolder
 if sys.argv.count("1"):
 
     print "Step 1 - SINS - is running."
+
+    if os.path.isdir(outputFolderSINS):
+        shutil.rmtree(outputFolderSINS)
 
     cmdExecuteSINS = "java -jar SINS2.jar  -projectName \"" + nameOfSINSProject + \
                      "\" -formati fZip -numberOfSimulation " + str(numberOfSimulations) + " -takeSampledParametersFromFile yes"

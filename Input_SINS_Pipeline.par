@@ -17,8 +17,11 @@ PROJECT_NAME = ParamPipelineTest
 
 
 # SINS
+# Note that the output folder for SINS is always named 'results' and will be
+# inside the ./SINS/dist/ folder, hence please do not change this inner structure
 PATH_TO_SINS_DIST_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINS/dist/
 PATH_TO_SINS_INPUT_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINS/dist/input/
+PATH_TO_SINS_OUTPUT_FOLDER = /home/tiago/Documents/PipelineTestFolder/SINS/dist/results/
 NAME_OF_SINS_PROJECT = PipelineTestSimulation
 NUMBER_OF_SIMULATIONS = 1 # number of simulations to be performed
 
